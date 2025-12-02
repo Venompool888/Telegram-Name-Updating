@@ -69,7 +69,7 @@ async def change_name_auto():
                     last_name = '%s时%s分 %s' % (hour, minu, hsym)
                 elif for_fun < 0.30:
                     last_name = '%s:%s %s %s %s' % (hour, minu, p, abbwn, hsym)
-                elif for_fun < 0.60:
+                else:
                     last_name = '%s:%s %s UTC+8 %s' % (hour, minu, p, hsym)
         
                 await client1(UpdateProfileRequest(last_name=last_name))
@@ -102,5 +102,4 @@ async def main(loop):
 
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(loop))
+    asyncio.run(main())
