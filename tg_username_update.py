@@ -5,6 +5,8 @@
 #  1. 使用async来update lastname，更加稳定
 #  2. 增加emoji clock，让时间显示更加有趣味
 
+import datetime
+import pytz
 import time
 import os
 import sys
@@ -16,11 +18,13 @@ from telethon import TelegramClient
 from telethon.tl.functions.account import UpdateProfileRequest
 from emoji import emojize
 
+tz_beijing = pytz.timezone("Asia/Shanghai")
 
-dizzy = emojize(":dizzy:", use_aliases=True)
-cake = emojize(":cake:", use_aliases=True)
 all_time_emoji_name = ["clock12", "clock1230", "clock1", "clock130", "clock2", "clock230", "clock3", "clock330", "clock4", "clock430", "clock5", "clock530", "clock6", "clock630", "clock7", "clock730", "clock8", "clock830", "clock9", "clock930", "clock10", "clock1030", "clock11", "clock1130"]
-time_emoji_symb = [emojize(":%s:" %s, use_aliases=True) for s in all_time_emoji_name]
+time_emoji_symb = [
+    emojize(f":{s}:", language="alias") 
+    for s in all_time_emoji_name
+]
 
 api_auth_file = 'api_auth'
 if not os.path.exists(api_auth_file+'.session'):
@@ -45,8 +49,13 @@ async def change_name_auto():
 
     while True:
         try:
-            time_cur = strftime("%H:%M:%S:%p:%a", time.localtime())
-            hour, minu, seco, p, abbwn = time_cur.split(':')
+            now = datetime.datetime.now(tz_beijing)
+            hour = now.strftime("%H")
+            minu = now.strftime("%M")
+            seco = now.strftime("%S")
+            p = now.strftime("%p")
+            abbwn = now.strftime("%a")
+
             if seco=='00' or seco=='30':
                 shift = 0
                 mult = 1
@@ -62,10 +71,6 @@ async def change_name_auto():
                     last_name = '%s:%s %s %s %s' % (hour, minu, p, abbwn, hsym)
                 elif for_fun < 0.60:
                     last_name = '%s:%s %s UTC+8 %s' % (hour, minu, p, hsym)
-                elif for_fun < 0.90:
-                    last_name = '%s' % dizzy
-                else:
-                    last_name = '%s' % cake
         
                 await client1(UpdateProfileRequest(last_name=last_name))
                 logger.info('Updated -> %s' % last_name)

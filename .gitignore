@@ -1,0 +1,33 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+
+# Telethon session files (VERY IMPORTANT)
+*.session
+*.session-journal
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# VSCode
+.vscode/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Python build dir
+build/
+dist/
+*.egg-info/
+
+# Docker
+*.pid
